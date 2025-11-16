@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 
 load_dotenv()
 
@@ -24,7 +25,16 @@ def main():
     summary_prompt_template = PromptTemplate(
         input_variables=["information"], template=summary_template
     )
-    llm = ChatOpenAI(temperature=0, model="gpt-5-nano")
+    # llm = ChatOpenAI(temperature=0, model="gpt-5-nano")
+    """ 
+    Trzeba najpierw zainstalować OLLAMA
+    w Terminalu: 
+    ollama pull gemma3:270m
+    ollama list
+    ollama run gemma3:270m - uruchamia pobrany model lokalnie. Można z nim konwersować w komendlinie
+    ollama --help
+    """
+    llm = ChatOllama(temperature=0, model="gemma3:270m")
     chain = summary_prompt_template | llm
     response = chain.invoke(input={"information": information})
     print(response.content)
